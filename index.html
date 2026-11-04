@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>PREVIEW - Shipyard Calc</title>
+  <meta name="description" content="Tape-measure fractions, metric to imperial, steel plate weight and pipe fitting math for the shipyard.">
+  <meta name="theme-color" content="#0b0d10">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Calc PREVIEW">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+  <link rel="apple-touch-icon" href="./apple-touch-icon.png">
+  <link rel="stylesheet" href="./styles.css">
+  <script>
+    /* PREVIEW copy only: keep this copy's saved history/settings apart from the real app (same website, so they would otherwise be shared) */
+    (function () {
+      try {
+        var P = "preview:", S = Storage.prototype, g = S.getItem, st = S.setItem, rm = S.removeItem;
+        S.getItem = function (k) { return g.call(this, P + k); };
+        S.setItem = function (k, v) { return st.call(this, P + k, v); };
+        S.removeItem = function (k) { return rm.call(this, P + k); };
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
+</head>
+<body class="fixed">
+  <div class="pvBadge" role="note">PREVIEW · test copy · copia de prueba</div>
+  <header class="top">
+    <h1>Shipyard Calc</h1>
+    <div class="topBtns">
+      <button id="shareBtn" class="pill share" type="button" aria-haspopup="dialog" aria-controls="shareOv" data-i18n="share">Share</button>
+      <button id="themeBtn" class="pill" type="button" aria-label="Switch light or dark">☀</button>
+    </div>
+  </header>
+
+  <div id="instBar" class="instBar hidden" role="region" aria-label="Install" data-i18n-aria="instRegion">
+    <button id="instBtn" class="instBtn hidden" type="button"><span class="instIco" aria-hidden="true">⤓</span> <span data-i18n="instBtn">Install app</span></button>
+    <p id="instMsg" class="instMsg hidden"></p>
+    <button id="instX" class="instX" type="button" aria-label="Hide install tip" data-i18n-aria="instHide">✕</button>
+  </div>
+
+  <div id="shareOv" class="ov hidden" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <div class="ovCard">
+      <button id="shareClose" class="ovX" type="button" aria-label="Close" data-i18n-aria="close">✕</button>
+      <h2 id="shareTitle" data-i18n="shareTitle">Scan to get Shipyard Calc</h2>
+      <div class="qrBox"><img src="./qr.svg" alt="QR code for https://biscuit5760.github.io/shipyard-calc/" width="410" height="410"></div>
+      <p class="qrUrl" id="shareUrl">https://biscuit5760.github.io/shipyard-calc/</p>
+      <div class="row btns ovBtns">
+        <button class="btn primary" id="shareCopy" type="button" data-i18n="copy">Copy link</button>
+        <button class="btn hidden" id="shareSend" type="button" data-i18n="send">Send link</button>
+      </div>
+      <p class="dim ovHint" data-i18n="ovHint">Point their phone camera at the code. No phone numbers needed.</p>
+      <p class="ovPriv" data-i18n="ovPriv">Counts anonymous opens only. No personal info.</p>
+    </div>
+  </div>
+
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="frac" type="button" data-i18n="tabFrac">Tape Fractions</button>
+    <button class="tab" data-tab="conv" type="button" data-i18n="tabConv">Metric ⇄ Imperial</button>
+    <button class="tab" data-tab="plate" type="button" data-i18n="tabPlate">Plate Weight</button>
+    <button class="tab" data-tab="pipe" type="button" data-i18n="tabPipe">Pipe</button>
+  </nav>
+
+  <main>
+    <!-- ============ TAPE FRACTIONS ============ -->
+    <section id="tab-frac" class="panel">
+      <h2 class="fracH" data-i18n="fracH">Tape-Measure Fractions</h2>
+      <div class="screen">
+        <div id="fExpr" class="expr" aria-live="polite">Type a number, then tap a fraction</div>
+        <div id="fRes" class="res" aria-live="polite"></div>
+      </div>
+      <div id="fMore" class="fMore"></div>
+      <div id="fScroll" class="fScroll">
+        <p class="how" data-i18n="fHow">Type the whole number, then tap its fraction: 25 then ½ is 25 ½. Or type a decimal like 12.83 to get the nearest tape mark. Tap ft ' after a number for feet, like 3 ft ' 4 ½. ⌫ takes back only the last thing you pressed. After =, tap an operator to keep going from the answer.</p>
+      </div>
+      <div class="keys" id="fKeys">
+      <div class="pad" id="fracPad">
+        <button class="k frac" data-k="f2">⅛</button>
+        <button class="k frac" data-k="f4">¼</button>
+        <button class="k frac" data-k="f6">⅜</button>
+        <button class="k frac" data-k="f8">½</button>
+        <button class="k frac" data-k="f10">⅝</button>
+        <button class="k frac" data-k="f12">¾</button>
+        <button class="k frac" data-k="f14">⅞</button>
+        <button class="k frac" id="t16" type="button" aria-expanded="false" data-i18n-aria="k16">/16</button>
+      </div>
+      <div class="pad hidden" id="pad16">
+        <button class="k frac" data-k="f1">1/16</button>
+        <button class="k frac" data-k="f3">3/16</button>
+        <button class="k frac" data-k="f5">5/16</button>
+        <button class="k frac" data-k="f7">7/16</button>
+        <button class="k frac" data-k="f9">9/16</button>
+        <button class="k frac" data-k="f11">11/16</button>
+        <button class="k frac" data-k="f13">13/16</button>
+        <button class="k frac" data-k="f15">15/16</button>
+      </div>
+      <div class="pad" id="numPad">
+        <button class="k num" data-k="7">7</button>
+        <button class="k num" data-k="8">8</button>
+        <button class="k num" data-k="9">9</button>
+        <button class="k op" data-k="÷">÷</button>
+        <button class="k num" data-k="4">4</button>
+        <button class="k num" data-k="5">5</button>
+        <button class="k num" data-k="6">6</button>
+        <button class="k op" data-k="×">×</button>
+        <button class="k num" data-k="1">1</button>
+        <button class="k num" data-k="2">2</button>
+        <button class="k num" data-k="3">3</button>
+        <button class="k op" data-k="−">−</button>
+        <button class="k num" data-k="0">0</button>
+        <button class="k num dot" data-k="." aria-label="Decimal point" data-i18n-aria="kDot">.</button>
+        <button class="k op" data-k="ft" data-i18n="kFt" data-i18n-aria="kFtAria">ft '</button>
+        <button class="k op" data-k="+">+</button>
+        <button class="k util" id="fClear" aria-label="Clear all" data-i18n-aria="kClear">C</button>
+        <button class="k util" id="fBack" aria-label="Backspace" data-i18n-aria="kBack">⌫</button>
+        <button class="k eq" id="fEq">=</button>
+      </div>
+      </div>
+    </section>
+
+    <!-- ============ METRIC <-> IMPERIAL ============ -->
+    <section id="tab-conv" class="panel hidden">
+      <h2 id="cHead">Metric → Inches &amp; Feet</h2>
+      <div class="seg" id="cDir">
+        <button class="on" data-v="toImp" type="button" data-i18n="dirImp">Metric → Imperial</button>
+        <button data-v="toMet" type="button" data-i18n="dirMet">Imperial → Metric</button>
+      </div>
+      <div id="cToImp">
+        <div class="seg" id="cUnit">
+          <button class="on" data-v="mm" type="button">mm</button>
+          <button data-v="cm" type="button">cm</button>
+          <button data-v="m" type="button">m</button>
+        </div>
+        <label class="lbl" for="cMetric" id="cMetricLbl">Measurement in mm</label>
+        <input id="cMetric" class="big" inputmode="decimal" autocomplete="off" placeholder="Type mm">
+        <div id="cImpOut" class="outBox"></div>
+      </div>
+      <div id="cToMet" class="hidden">
+        <div class="row">
+          <div class="grow"><label class="lbl" for="cFeet" data-i18n="feet">Feet</label>
+            <input id="cFeet" class="big" inputmode="decimal" autocomplete="off" placeholder="0"></div>
+          <div class="grow2"><label class="lbl" for="cInches" data-i18n="inchesOr">Inches (or "5 3/8")</label>
+            <input id="cInches" class="big" inputmode="text" autocomplete="off" placeholder="0"></div>
+        </div>
+        <label class="lbl" for="cFrac" data-i18n="plusFrac">Plus fraction</label>
+        <select id="cFrac" class="big"></select>
+        <div id="cMetOut" class="outBox"></div>
+      </div>
+      <div class="row btns">
+        <button class="btn primary" id="cSwap" type="button" data-i18n="swap">⇄ Swap direction</button>
+        <button class="btn" id="cClear" type="button" data-i18n="clear">Clear</button>
+      </div>
+      <p class="how" data-i18n="cHow">1 inch = 25.4 mm exactly. Fractions round to the nearest 1/16" and the note shows how far that rounding moved it.</p>
+    </section>
+
+    <!-- ============ PLATE WEIGHT ============ -->
+    <section id="tab-plate" class="panel hidden">
+      <h2 data-i18n="plateH">Plate Weight</h2>
+      <div class="lbl" data-i18n="lwIn">Length &amp; width in</div>
+      <div class="seg" id="pLenUnit">
+        <button class="on" data-v="ft" type="button" data-i18n="uFt">feet</button>
+        <button data-v="in" type="button" data-i18n="uIn">inches</button>
+        <button data-v="mm" type="button">mm</button>
+        <button data-v="m" type="button">m</button>
+      </div>
+      <div id="pFtBoxes">
+        <div class="lbl" data-i18n="length">Length</div>
+        <div class="row">
+          <input id="pLFt" class="big grow" inputmode="decimal" autocomplete="off" placeholder="ft" data-i18n-ph="phFt">
+          <input id="pLIn" class="big grow2" inputmode="text" autocomplete="off" placeholder="in" data-i18n-ph="phIn">
+        </div>
+        <div class="lbl" data-i18n="width">Width</div>
+        <div class="row">
+          <input id="pWFt" class="big grow" inputmode="decimal" autocomplete="off" placeholder="ft" data-i18n-ph="phFt">
+          <input id="pWIn" class="big grow2" inputmode="text" autocomplete="off" placeholder="in" data-i18n-ph="phIn">
+        </div>
+      </div>
+      <div id="pOneBoxes" class="row hidden">
+        <div class="grow"><label class="lbl" for="pL" id="pLLbl">Length</label>
+          <input id="pL" class="big" inputmode="decimal" autocomplete="off"></div>
+        <div class="grow"><label class="lbl" for="pW" id="pWLbl">Width</label>
+          <input id="pW" class="big" inputmode="decimal" autocomplete="off"></div>
+      </div>
+      <div class="lbl" data-i18n="thkIn">Thickness in</div>
+      <div class="seg" id="pThkUnit">
+        <button class="on" data-v="mm" type="button">mm</button>
+        <button data-v="in" type="button" data-i18n="uIn">inches</button>
+      </div>
+      <label class="lbl" for="pThk" id="pThkLbl">Thickness (mm)</label>
+      <input id="pThk" class="big" inputmode="decimal" autocomplete="off" placeholder="e.g. 14">
+      <div class="pad hidden" id="pThkFracs">
+        <button class="k frac" data-t="1/4">1/4"</button>
+        <button class="k frac" data-t="5/16">5/16"</button>
+        <button class="k frac" data-t="3/8">3/8"</button>
+        <button class="k frac" data-t="1/2">1/2"</button>
+        <button class="k frac" data-t="5/8">5/8"</button>
+        <button class="k frac" data-t="3/4">3/4"</button>
+        <button class="k frac" data-t="1">1"</button>
+      </div>
+      <div class="row">
+        <div class="grow"><label class="lbl" for="pQty" data-i18n="qty">How many</label>
+          <input id="pQty" class="big" inputmode="numeric" autocomplete="off" value="1"></div>
+      </div>
+      <label class="lbl" for="pMat" data-i18n="material">Material</label>
+      <select id="pMat" class="big">
+        <option value="mild" data-i18n="matMild">Mild steel (490 lb/ft³)</option>
+        <option value="stainless" data-i18n="matStain">Stainless (500 lb/ft³)</option>
+        <option value="alum" data-i18n="matAlum">Aluminum (169 lb/ft³)</option>
+      </select>
+      <div id="pOut" class="outBox"></div>
+      <div class="row btns">
+        <button class="btn" id="pClear" type="button" data-i18n="clear">Clear</button>
+      </div>
+      <p class="how" data-i18n="pHow">Weight = length × width × thickness × density (mild steel 490 lb/ft³, 7850 kg/m³). Pounds use the lb/ft³ figure and kilograms use the kg/m³ figure.</p>
+    </section>
+
+    <!-- ============ PIPE ============ -->
+    <section id="tab-pipe" class="panel hidden">
+      <h2 data-i18n="pipeH">Pipe Fitting</h2>
+      <div class="seg pTools" id="ptSel">
+        <button class="on" data-v="off" type="button" data-i18n="ptOff">Offset</button>
+        <button data-v="roll" type="button" data-i18n="ptRoll">Rolling offset</button>
+        <button data-v="to" type="button" data-i18n="ptTo">Take-outs</button>
+        <button data-v="cut" type="button" data-i18n="ptCut">Cut length</button>
+        <button data-v="mit" type="button" data-i18n="ptMit">Miters</button>
+      </div>
+      <div id="ptUnitBox">
+        <div class="lbl" data-i18n="measIn2">Measure in</div>
+        <div class="seg" id="ptUnit">
+          <button class="on" data-v="in" type="button" data-i18n="uIn">inches</button>
+          <button data-v="mm" type="button">mm</button>
+        </div>
+      </div>
+
+      <!-- simple offset -->
+      <div id="pt-off" class="ptool">
+        <h3 data-i18n="offH">Simple offset</h3>
+        <label class="lbl" for="oOff" data-i18n="offset">Offset (center to center)</label>
+        <input id="oOff" class="big lenIn" inputmode="text" autocomplete="off">
+        <div class="lbl" data-i18n="angle">Fitting angle</div>
+        <div class="seg angSeg" id="oAng">
+          <button class="on" data-v="45" type="button">45°</button>
+          <button data-v="22.5" type="button">22½°</button>
+          <button data-v="60" type="button">60°</button>
+          <button data-v="30" type="button">30°</button>
+          <button data-v="11.25" type="button">11¼°</button>
+          <button data-v="c" type="button" data-i18n="angCustom">Other</button>
+        </div>
+        <input id="oAngC" class="big hidden" inputmode="decimal" autocomplete="off" placeholder="e.g. 37" data-i18n-ph="phAng" aria-label="Fitting angle in degrees" data-i18n-aria="angAria">
+        <div id="oOut" class="outBox"></div>
+        <p class="how" data-i18n="offHow">Travel = offset × cosecant of the angle. Run (advance) = offset × cotangent. Multipliers: 45° 1.414, 22½° 2.613, 60° 1.155, 30° 2.000, 11¼° 5.126.</p>
+      </div>
+
+      <!-- rolling offset -->
+      <div id="pt-roll" class="ptool hidden">
+        <h3 data-i18n="rollH">Rolling offset</h3>
+        <label class="lbl" for="rRise" data-i18n="rise">Rise (up and down)</label>
+        <input id="rRise" class="big lenIn" inputmode="text" autocomplete="off">
+        <label class="lbl" for="rRoll" data-i18n="roll">Roll (side to side)</label>
+        <input id="rRoll" class="big lenIn" inputmode="text" autocomplete="off">
+        <div class="lbl" data-i18n="angle">Fitting angle</div>
+        <div class="seg angSeg" id="rAng">
+          <button class="on" data-v="45" type="button">45°</button>
+          <button data-v="22.5" type="button">22½°</button>
+          <button data-v="60" type="button">60°</button>
+          <button data-v="30" type="button">30°</button>
+          <button data-v="11.25" type="button">11¼°</button>
+          <button data-v="c" type="button" data-i18n="angCustom">Other</button>
+        </div>
+        <input id="rAngC" class="big hidden" inputmode="decimal" autocomplete="off" placeholder="e.g. 37" data-i18n-ph="phAng" aria-label="Fitting angle in degrees" data-i18n-aria="angAria">
+        <div id="rOut" class="outBox"></div>
+        <p class="how" data-i18n="rollHow">True offset = √(rise² + roll²). Travel = true offset × cosecant. Setback = true offset × cotangent.</p>
+      </div>
+
+      <!-- take-outs -->
+      <div id="pt-to" class="ptool hidden">
+        <h3 data-i18n="toH">Elbow take-outs (butt-weld)</h3>
+        <label class="lbl" for="tSize" data-i18n="pipeSize">Pipe size (NPS)</label>
+        <select id="tSize" class="big sizeSel"></select>
+        <div class="lbl" data-i18n="fitType">Fitting</div>
+        <div class="seg" id="tType">
+          <button class="on" data-v="lr90" type="button" data-i18n="ftLr90s">90° LR</button>
+          <button data-v="sr90" type="button" data-i18n="ftSr90s">90° SR</button>
+          <button data-v="lr45" type="button" data-i18n="ftLr45s">45° LR</button>
+        </div>
+        <div id="tOut" class="outBox"></div>
+        <p class="how" data-i18n="toHow">Center-to-end per ASME B16.9 (same for every schedule). Long radius = 1.5 × NPS, short radius = 1 × NPS. B16.9 has short radius only from 1" up, and no 45° short radius.</p>
+      </div>
+
+      <!-- cut length -->
+      <div id="pt-cut" class="ptool hidden">
+        <h3 data-i18n="cutH">Cut length</h3>
+        <label class="lbl" for="kCC" data-i18n="cc">Center to center</label>
+        <input id="kCC" class="big lenIn" inputmode="text" autocomplete="off">
+        <label class="lbl" for="kSize" data-i18n="pipeSizeChart">Pipe size for the chart take-outs</label>
+        <select id="kSize" class="big sizeSel"></select>
+        <label class="lbl" for="kEnd1" data-i18n="kEnd1">Fitting at end 1</label>
+        <select id="kEnd1" class="big">
+          <option value="lr90" data-i18n="ftLr90">90° long radius</option>
+          <option value="sr90" data-i18n="ftSr90">90° short radius</option>
+          <option value="lr45" data-i18n="ftLr45">45° long radius</option>
+          <option value="typed" data-i18n="ftTyped">Type my own take-out</option>
+          <option value="none" data-i18n="ftNone">None (square end)</option>
+        </select>
+        <input id="kTyped1" class="big hidden lenIn" inputmode="text" autocomplete="off" aria-label="Take-out at end 1" data-i18n-aria="kTypedAria1">
+        <label class="lbl" for="kEnd2" data-i18n="kEnd2">Fitting at end 2</label>
+        <select id="kEnd2" class="big">
+          <option value="lr90" data-i18n="ftLr90">90° long radius</option>
+          <option value="sr90" data-i18n="ftSr90">90° short radius</option>
+          <option value="lr45" data-i18n="ftLr45">45° long radius</option>
+          <option value="typed" data-i18n="ftTyped">Type my own take-out</option>
+          <option value="none" data-i18n="ftNone">None (square end)</option>
+        </select>
+        <input id="kTyped2" class="big hidden lenIn" inputmode="text" autocomplete="off" aria-label="Take-out at end 2" data-i18n-aria="kTypedAria2">
+        <div class="row">
+          <div class="grow2"><label class="lbl" for="kGap" data-i18n="gap">Weld gap (each weld)</label>
+            <input id="kGap" class="big lenIn" inputmode="text" autocomplete="off" value="1/8"></div>
+          <div class="grow"><div class="lbl" data-i18n="welds">Welds</div>
+            <div class="seg" id="kWelds">
+              <button data-v="0" type="button">0</button>
+              <button data-v="1" type="button">1</button>
+              <button class="on" data-v="2" type="button">2</button>
+            </div></div>
+        </div>
+        <div id="kOut" class="outBox"></div>
+        <div class="row btns"><button class="btn" id="kClear" type="button" data-i18n="clear">Clear</button></div>
+        <p class="how" data-i18n="cutHow">Cut = center to center − take-out at each end − (gap × welds).</p>
+      </div>
+
+      <!-- miters -->
+      <div id="pt-mit" class="ptool hidden">
+        <h3 data-i18n="mitH">Miter cuts (lobster back)</h3>
+        <label class="lbl" for="mSize" data-i18n="pipeOd">Pipe size (sets the OD)</label>
+        <select id="mSize" class="big sizeSel"></select>
+        <input id="mOD" class="big hidden lenIn" inputmode="text" autocomplete="off" aria-label="Pipe outside diameter" data-i18n-aria="odAria">
+        <div class="lbl" data-i18n="pieces">Pieces</div>
+        <div class="seg" id="mPieces">
+          <button data-v="2" type="button">2</button>
+          <button class="on" data-v="3" type="button">3</button>
+          <button data-v="4" type="button">4</button>
+          <button data-v="5" type="button">5</button>
+          <button data-v="6" type="button">6</button>
+          <button data-v="7" type="button">7</button>
+        </div>
+        <label class="lbl" for="mBend" data-i18n="bend">Total bend (degrees)</label>
+        <input id="mBend" class="big" inputmode="decimal" autocomplete="off" value="90">
+        <label class="lbl" for="mR" data-i18n="radius">Bend radius (to the centerline)</label>
+        <input id="mR" class="big lenIn" inputmode="text" autocomplete="off">
+        <div class="row btns"><button class="btn" id="mR15" type="button" data-i18n="useLR">Use long radius (1.5 × size)</button></div>
+        <div id="mOut" class="outBox"></div>
+        <p class="how" data-i18n="mitHow">Cut angle = total bend ÷ (2 × welds). Cut-back = OD ÷ 2 × tan(cut angle), marked each side of the centerline. Middle piece: 2 × radius × tan on the centerline, add OD × tan on the long side, take it off the short side. End pieces are half that, plus any straight you want.</p>
+      </div>
+      <p class="note pipeRound" data-i18n="pipeRound">Answers round to the nearest 1/16". Check against your drawing before you cut.</p>
+    </section>
+
+    <!-- ============ RECENT ============ -->
+    <section id="recentBox" class="panel hidden">
+      <div class="recentHead">
+        <h2 id="recentTitle" data-i18n="recent">Recent</h2>
+        <button class="btn small" id="recentClear" type="button" data-i18n="clearList">Clear list</button>
+      </div>
+      <ol id="recentList" class="recent"></ol>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <h3 data-i18n="homeH">Put it on your home screen</h3>
+    <p data-i18n-html="homeIos"><b>iPhone (Safari):</b> tap the Share button (square with an up arrow), then <b>Add to Home Screen</b>.</p>
+    <p data-i18n-html="homeAnd"><b>Android (Chrome):</b> tap the <b>⋮</b> menu, then <b>Install app</b> or <b>Add to Home screen</b>.</p>
+    <p class="dim" data-i18n="homeOff">Works offline once it's opened. Your math and history stay on this phone.</p>
+  </footer>
+
+  <script src="./i18n.js"></script>
+  <script src="./calc.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

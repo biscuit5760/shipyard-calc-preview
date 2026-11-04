@@ -1,0 +1,224 @@
+:root, [data-theme="dark"] {
+  --bg: #0b0d10; --panel: #15191e; --field: #1d232a; --key: #232a33; --op: #2e3742; --pressed: #4a5868;
+  --text: #ffffff; --dim: #b9c2cc; --line: #3a444f; --strong: #7d8a98;
+  --accent: #ffb000; --accentText: #111111; --warn: #ffb000;
+}
+[data-theme="light"] {
+  --bg: #ffffff; --panel: #f3f4f6; --field: #ffffff; --key: #ffffff; --op: #e3e6ea; --pressed: #c4cad2;
+  --text: #000000; --dim: #39424c; --line: #c9ced5; --strong: #5b6673;
+  --accent: #1a1a1a; --accentText: #ffffff; --warn: #8a5a00;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--text);
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  font-size: 18px; line-height: 1.4;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+.top { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 6px; max-width: 720px; margin: 0 auto; flex-wrap: wrap; }
+h1 { font-size: 28px; margin: 0; font-weight: 800; letter-spacing: .3px; }
+h2 { font-size: 24px; margin: 0 0 14px; font-weight: 800; }
+h3 { font-size: 20px; margin: 0 0 8px; }
+main { max-width: 720px; margin: 0 auto; padding: 0 12px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 8px; padding: 8px 12px 12px; max-width: 720px; margin: 0 auto; }
+.tab { flex: 1 1 30%; min-height: 54px; font-size: 18px; font-weight: 700; border-radius: 12px; border: 2px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; padding: 6px 8px; }
+.tab.active { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 14px; }
+.hidden { display: none !important; }
+.screen { border: 2px solid var(--strong); background: var(--field); border-radius: 12px; padding: 14px 16px; min-height: 124px; display: flex; flex-direction: column; justify-content: flex-end; gap: 4px; margin-bottom: 12px; }
+.expr { font-size: 24px; color: var(--dim); word-break: break-word; min-height: 30px; }
+.res { font-size: 42px; font-weight: 800; line-height: 1.15; word-break: break-word; }
+.pad { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 10px 0; }
+.k { min-height: 64px; font-size: 28px; font-weight: 700; border-radius: 12px; border: 1px solid var(--strong); background: var(--op); color: var(--text); cursor: pointer; padding: 0; touch-action: manipulation; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; font-family: inherit; }
+.k:active, .k.on { background: var(--pressed); }
+.k.num { background: var(--key); }
+.k.frac { min-height: 56px; font-size: 24px; }
+.k.eq { grid-column: span 2; background: var(--accent); color: var(--accentText); border-color: var(--accent); font-size: 32px; }
+.cell { padding: 12px 0; border-top: 1px solid var(--line); }
+.lbl { display: block; font-size: 17px; color: var(--dim); margin: 12px 0 6px; }
+.v-big { font-size: 40px; font-weight: 800; line-height: 1.15; }
+.v-mid { font-size: 26px; font-weight: 700; }
+.note { font-size: 16px; color: var(--dim); }
+input.big, select.big { width: 100%; min-width: 0; font-size: 32px; font-weight: 700; padding: 12px 14px; border-radius: 12px; border: 2px solid var(--strong); background: var(--field); color: var(--text); font-family: inherit; outline: none; }
+select.big { font-size: 22px; min-height: 60px; }
+input.big:focus, select.big:focus { border-color: var(--accent); }
+.row { display: flex; flex-wrap: wrap; gap: 10px; }
+.row .grow { flex: 1 1 120px; min-width: 0; }
+.row .grow2 { flex: 1 1 160px; min-width: 0; }
+.btns { margin-top: 16px; }
+.seg { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+.seg button { flex: 1 1 auto; min-height: 50px; font-size: 18px; font-weight: 700; border-radius: 10px; border: 2px solid var(--line); background: var(--field); color: var(--text); padding: 6px 12px; cursor: pointer; font-family: inherit; }
+.seg button.on { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
+.btn { min-height: 54px; font-size: 19px; font-weight: 700; padding: 8px 18px; border-radius: 12px; border: 2px solid var(--strong); background: var(--op); color: var(--text); cursor: pointer; font-family: inherit; }
+.btn.primary { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
+.btn.small { min-height: 44px; font-size: 16px; padding: 6px 14px; }
+.pill { min-height: 44px; font-size: 16px; font-weight: 700; padding: 6px 14px; border-radius: 999px; border: 2px solid var(--strong); background: var(--panel); color: var(--text); cursor: pointer; font-family: inherit; }
+.recentHead { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+.recentHead h2 { margin: 0; }
+.recent { list-style: none; margin: 0; padding: 0; }
+.recent li { padding: 10px 0; border-top: 1px solid var(--line); }
+.recent .r-to { font-size: 22px; font-weight: 700; }
+.recent .r-from { font-size: 16px; color: var(--dim); }
+.how { font-size: 16px; color: var(--dim); margin: 14px 0 0; }
+.foot { max-width: 720px; margin: 8px auto 30px; padding: 0 16px; font-size: 17px; color: var(--dim); }
+.foot b { color: var(--text); }
+.foot .dim { font-size: 15px; }
+
+/* ---------- share / QR ---------- */
+.topBtns { display: flex; gap: 8px; }
+.pill.share { background: var(--accent); color: var(--accentText); border-color: var(--accent); }
+.ov { position: fixed; inset: 0; z-index: 50; background: rgba(0,0,0,.82); display: flex; align-items: center; justify-content: center; padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)); }
+.ovCard { position: relative; width: 100%; max-width: 460px; max-height: 100%; overflow: auto; background: #111111; color: #ffffff; border: 3px solid #ffb000; border-radius: 18px; padding: 18px 16px 16px; text-align: center; }
+.ovCard h2 { margin: 6px 44px 14px; font-size: 24px; color: #ffffff; }
+.ovX { position: absolute; top: 8px; right: 8px; width: 48px; height: 48px; border-radius: 999px; border: 2px solid #ffb000; background: #111111; color: #ffb000; font-size: 22px; font-weight: 800; cursor: pointer; }
+.qrBox { background: #ffffff; border-radius: 10px; padding: 8px; margin: 0 auto; width: 100%; max-width: 360px; }
+.qrBox img { display: block; width: 100%; height: auto; image-rendering: pixelated; }
+.qrUrl { font-size: 14px; color: #d0d6dc; word-break: break-all; margin: 12px 0 6px; user-select: all; -webkit-user-select: all; }
+.ovBtns { justify-content: center; }
+.ovBtns .btn { flex: 1 1 40%; }
+.ovCard .btn.primary { background: #ffb000; color: #111111; border-color: #ffb000; }
+.ovHint { font-size: 14px; margin: 10px 0 0; color: #b9c2cc; }
+.ovCard .btn:not(.primary) { background: #2e3742; color: #ffffff; border-color: #7d8a98; }
+[data-theme="light"] .pill.share { background: #ffb000; color: #111111; border-color: #111111; }
+
+/* ---------- no-jump layout (v2) ---------- */
+html, body { overscroll-behavior: none; }
+button, input, select, .tab, .seg button, a { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+input, select, textarea { font-size: max(16px, 1em); }
+.top { flex-wrap: nowrap; padding: 10px 14px 4px; }
+.top h1 { font-size: clamp(21px, 6.4vw, 28px); white-space: nowrap; }
+.topBtns { flex: none; }
+#themeBtn { min-width: 48px; padding: 6px 10px; font-size: 18px; }
+.tabs { padding: 6px 12px 10px; }
+.tab { min-height: 52px; }
+
+/* calculator display: fixed size, never grows */
+#tab-frac .screen { height: 104px; min-height: 0; flex: none; justify-content: center; overflow: hidden; padding: 8px 14px; gap: 2px; }
+#tab-frac .expr { height: 32px; min-height: 0; line-height: 32px; font-size: 22px; white-space: nowrap; overflow-x: auto; overflow-y: hidden; word-break: normal; scrollbar-width: none; overscroll-behavior: contain; }
+#tab-frac .expr::-webkit-scrollbar { display: none; }
+#tab-frac .res { height: 52px; line-height: 52px; font-size: 42px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; word-break: normal; }
+/* feet-inches / decimal / mm lines: reserved space */
+.fMore { height: 58px; flex: none; overflow: hidden; margin: 0 0 6px; }
+.fMore .cell { padding: 0; border: 0; display: flex; align-items: baseline; gap: 8px; height: 29px; line-height: 29px; white-space: nowrap; overflow: hidden; }
+.fMore .cell .lbl { margin: 0; font-size: 14px; flex: none; }
+.fMore .cell .v-mid { font-size: 19px; overflow: hidden; text-overflow: ellipsis; }
+.fMore .cell .note { display: none; }
+.fScroll .how { margin: 4px 0 8px; font-size: 15px; }
+
+/* Tape tab: whole app fits one screen, keypad pinned to the bottom, page never scrolls */
+body.fixed { height: 100vh; height: var(--appH, 100dvh); overflow: hidden; display: flex; flex-direction: column; }
+body.fixed .top, body.fixed .tabs { flex: none; width: 100%; }
+body.fixed main { flex: 1 1 auto; min-height: 0; width: 100%; display: flex; flex-direction: column; padding-bottom: 8px; }
+body.fixed #tab-frac { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; margin-bottom: 0; padding: 10px 12px 12px; overflow: hidden; }
+body.fixed .fracH { display: none; }
+body.fixed .fScroll { flex: 1 1 0; min-height: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; }
+body.fixed .fScroll .panel { padding: 8px 0 0; margin: 0; border: 0; background: none; }
+body.fixed .fScroll .recent li { padding: 6px 0; }
+body.fixed .foot { display: none; }
+body:not(.fixed) .fScroll { margin-bottom: 8px; }
+
+/* other tabs: result boxes keep their space so the page doesn't jump */
+.outBox { min-height: var(--outH, 0px); }
+
+/* ---------- v3: keypad fills the real visible screen, never overflows ---------- */
+.k.dot { font-size: 34px; line-height: 1; }
+body.fixed { padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left); }
+.fMore { height: 68px; }
+.fMore .cell { height: 25px; line-height: 25px; }
+.fMore .fNote { height: 18px; line-height: 18px; font-size: 13px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* one 4-column grid for all key rows; rows share the leftover height evenly */
+.keys { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.keys .pad { display: contents; }
+.keys .k { min-height: 0; }
+body:not(.fixed) .keys { grid-auto-rows: 60px; }
+body.fixed .keys { --rows: 7; flex: 1 1 auto; min-height: 0; grid-auto-rows: minmax(0, 1fr); max-height: calc(var(--rows) * 76px + (var(--rows) - 1) * 8px); }
+body.fixed .keys.open16 { --rows: 9; }
+body.fixed .keys .k.frac { font-size: 22px; }
+/* history/help only takes space the keys don't need (keys stop growing at 76px) */
+body.fixed .fScroll { flex: 0.0001 1 0; }
+/* short screens: tighten everything above the keys */
+@media (max-height: 760px) {
+  body.fixed .top { padding: 6px 12px 2px; }
+  body.fixed .top h1 { font-size: 22px; }
+  body.fixed .pill { min-height: 40px; padding: 4px 12px; }
+  body.fixed .tabs { padding: 4px 10px 6px; gap: 6px; }
+  body.fixed .tab { min-height: 44px; font-size: 16px; line-height: 1.15; padding: 4px 6px; }
+  body.fixed #tab-frac { padding: 8px 10px 10px; }
+  body.fixed #tab-frac .screen { height: 84px; padding: 4px 12px; margin-bottom: 6px; }
+  body.fixed #tab-frac .expr { height: 28px; line-height: 28px; }
+  body.fixed #tab-frac .res { height: 46px; line-height: 46px; }
+  body.fixed .fMore { height: 62px; margin-bottom: 4px; }
+  body.fixed .fMore .cell { height: 22px; line-height: 22px; }
+  body.fixed .keys { gap: 6px; }
+  body.fixed main { padding-bottom: 4px; }
+}
+@media (max-height: 680px) {
+  body.fixed .tab { min-height: 40px; font-size: 15px; }
+  body.fixed #tab-frac .screen { height: 76px; }
+  body.fixed #tab-frac .res { height: 40px; line-height: 40px; }
+  body.fixed .fMore { height: 58px; }
+  body.fixed .fMore .cell { height: 20px; line-height: 20px; }
+  body.fixed .fMore .fNote { height: 16px; line-height: 16px; font-size: 12px; }
+}
+.fMore .fHint { height: 25px; line-height: 25px; font-size: 15px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-height: 760px) { body.fixed .fMore .fHint { height: 22px; line-height: 22px; font-size: 14px; } }
+.ovPriv { font-size: 12px; color: #8b96a1; margin: 6px 0 0; }
+
+/* ---------- v7: install banner (one short strip under the title; keypad shrinks to fit) ---------- */
+.instBar { display: flex; align-items: center; gap: 8px; max-width: 720px; margin: 0 auto; padding: 4px 12px 2px; width: 100%; }
+body.fixed .instBar { flex: none; }
+.instBtn { flex: 1 1 auto; min-height: 44px; font-size: 18px; font-weight: 800; border-radius: 12px; border: 2px solid var(--accent); background: var(--accent); color: var(--accentText); cursor: pointer; font-family: inherit; padding: 4px 12px; }
+.instIco { font-size: 20px; }
+.instMsg { flex: 1 1 auto; margin: 0; min-height: 44px; display: flex; align-items: center; flex-wrap: wrap; gap: 0 4px; font-size: 15px; line-height: 1.25; font-weight: 600; color: var(--text); background: var(--panel); border: 2px solid var(--accent); border-radius: 12px; padding: 3px 10px; }
+.instMsg svg { width: 18px; height: 18px; vertical-align: -3px; flex: none; }
+.instX { flex: none; width: 44px; height: 44px; border-radius: 999px; border: 2px solid var(--strong); background: var(--panel); color: var(--text); font-size: 18px; font-weight: 800; cursor: pointer; font-family: inherit; padding: 0; }
+@media (max-height: 760px) {
+  body.fixed .instBar { padding: 2px 10px 0; }
+  body.fixed .instBtn, body.fixed .instMsg { min-height: 40px; }
+  body.fixed .instBtn { font-size: 17px; }
+  body.fixed .instMsg { font-size: 14px; line-height: 1.2; padding: 2px 8px; }
+  body.fixed .instX { width: 40px; height: 40px; }
+}
+/* banner showing on a short screen: tighten the rows above the keys so the keypad keeps its size */
+@media (max-height: 760px) {
+  body.fixed.instOn .top { padding: 4px 12px 0; }
+  body.fixed.instOn .top h1 { font-size: 20px; }
+  body.fixed.instOn .pill { min-height: 38px; }
+  body.fixed.instOn .instBar { padding: 3px 10px 0; }
+  body.fixed.instOn .instBtn, body.fixed.instOn .instMsg { min-height: 38px; }
+  body.fixed.instOn .instX { width: 38px; height: 38px; }
+  body.fixed.instOn .tabs { padding: 4px 10px 4px; }
+  body.fixed.instOn .tab { min-height: 38px; }
+  body.fixed.instOn #tab-frac { padding: 6px 10px 8px; }
+  body.fixed.instOn #tab-frac .screen { height: 72px; margin-bottom: 4px; }
+  body.fixed.instOn #tab-frac .expr { height: 26px; line-height: 26px; }
+  body.fixed.instOn #tab-frac .res { height: 40px; line-height: 40px; }
+  body.fixed.instOn .fMore { height: 56px; margin-bottom: 2px; }
+  body.fixed.instOn .fMore .cell { height: 20px; line-height: 20px; }
+  body.fixed.instOn .fMore .fNote { height: 16px; line-height: 16px; font-size: 12px; }
+  body.fixed.instOn .fMore .fHint { height: 20px; line-height: 20px; font-size: 13px; }
+  body.fixed.instOn .keys { gap: 5px; }
+  body.fixed.instOn main { padding-bottom: 2px; }
+}
+
+/* ---------- v8: Pipe tab ---------- */
+/* four tabs share one row, so the tape keypad keeps its height */
+.tabs { flex-wrap: nowrap; }
+.tab { flex: 1 1 auto; font-size: 16px; line-height: 1.15; padding: 4px 4px; }
+@media (max-width: 380px) { body .tabs { gap: 6px; padding-left: 8px; padding-right: 8px; } body .tabs .tab { font-size: 14px; padding: 2px 3px; min-height: 44px; } }
+@media (max-width: 340px) { body .tabs .tab { font-size: 13px; } }
+#tab-pipe h3 { font-size: 20px; margin: 14px 0 2px; }
+.pTools button { flex: 1 1 40%; }
+.angSeg button { flex: 1 1 28%; font-size: 20px; }
+#tab-pipe .v-mid { font-size: 22px; }
+#tab-pipe .cell .note { margin-top: 2px; }
+.warnTxt { color: var(--warn); font-weight: 700; padding: 10px 0; }
+.pipeRound { margin: 10px 0 0; }
+.mRow { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; padding: 3px 0; }
+.mRow .mK { flex: 1 1 150px; font-size: 17px; color: var(--dim); }
+.mRow .mV { font-size: 24px; font-weight: 800; }
+.mRow .mMm { font-size: 15px; color: var(--dim); }
+
+/* PREVIEW copy only */
+.pvBadge { flex: none; background: #d7263d; color: #ffffff; font-size: 13px; font-weight: 800; letter-spacing: .5px; text-align: center; padding: 2px 8px; line-height: 18px; }
