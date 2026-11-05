@@ -91,7 +91,9 @@ var COUNTER_URL = ""; // PREVIEW copy: counting is off
     var fixed = tool === "frac";
     document.body.classList.toggle("fixed", fixed);
     var box = $("recentBox");
-    if (fixed) $("fScroll").appendChild(box); else recentHome.appendChild(box);
+    // Tape: Recent sits first in its own fixed-height strip above the keypad (help text scrolls under it)
+    if (fixed) $("fScroll").insertBefore(box, $("fScroll").firstChild); else recentHome.appendChild(box);
+    document.documentElement.classList.toggle("fixedPage", fixed);
     if (fixed) { window.scrollTo(0, 0); sizeKeys(); }
   }
   function sizeKeys() {
@@ -138,12 +140,15 @@ var COUNTER_URL = ""; // PREVIEW copy: counting is off
     }
     recent[which] = [{ from: from, to: to }].concat(prev).slice(0, 10);
     saveList(KEYS[which], recent[which]);
-    if (which === tool) renderRecent();
+    if (which === tool) { renderRecent(); if (tool === "frac") $("fScroll").scrollTop = 0; }
   }
   function renderRecent() {
     var list = recent[tool];
-    $("recentBox").classList.toggle("hidden", list.length === 0);
+    // always shown on every tab; an empty list gets a one-line note and no Clear button (its space is kept so nothing shifts)
+    $("recentClear").classList.toggle("off", list.length === 0);
+    $("recentClear").disabled = list.length === 0;
     $("recentTitle").textContent = tool === "conv" ? T("recentConv") : tool === "frac" ? T("recentFrac") : tool === "pipe" ? T("recentPipe") : T("recentPlate");
+    if (!list.length) { fill($("recentList"), [el("li", "rEmpty", tool === "frac" ? T("recentEmptyFrac") : T("recentEmpty"))]); return; }
     fill($("recentList"), list.map(function (r) {
       var li = el("li");
       li.appendChild(el("div", "r-to", r.to));

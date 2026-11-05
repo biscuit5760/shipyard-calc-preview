@@ -1,6 +1,6 @@
 /* Shipyard Calc - offline cache. Bump VERSION when any file changes. */
 var PREFIX = "shipyard-calc-preview-"; // PREVIEW copy: never shares or deletes the live app's caches
-var VERSION = PREFIX + "v8";
+var VERSION = PREFIX + "v9";
 var FILES = [
   "./",
   "./index.html",
