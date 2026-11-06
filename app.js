@@ -91,8 +91,8 @@ var COUNTER_URL = ""; // PREVIEW copy: counting is off
     var fixed = tool === "frac";
     document.body.classList.toggle("fixed", fixed);
     var box = $("recentBox");
-    // Tape: Recent sits first in its own fixed-height strip above the keypad (help text scrolls under it)
-    if (fixed) $("fScroll").insertBefore(box, $("fScroll").firstChild); else recentHome.appendChild(box);
+    // Tape: Recent lives under the keypad (same spot as other tabs), so typing never reflows the keys
+    if (fixed) $("tab-frac").appendChild(box); else recentHome.appendChild(box);
     document.documentElement.classList.toggle("fixedPage", fixed);
     if (fixed) { window.scrollTo(0, 0); sizeKeys(); }
   }
@@ -140,7 +140,7 @@ var COUNTER_URL = ""; // PREVIEW copy: counting is off
     }
     recent[which] = [{ from: from, to: to }].concat(prev).slice(0, 10);
     saveList(KEYS[which], recent[which]);
-    if (which === tool) { renderRecent(); if (tool === "frac") $("fScroll").scrollTop = 0; }
+    if (which === tool) { renderRecent(); if (tool === "frac") $("recentBox").scrollTop = 0; }
   }
   function renderRecent() {
     var list = recent[tool];

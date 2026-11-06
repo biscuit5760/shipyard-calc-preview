@@ -220,31 +220,73 @@ body.fixed .instBar { flex: none; }
 .mRow .mV { font-size: 24px; font-weight: 800; }
 .mRow .mMm { font-size: 15px; color: var(--dim); }
 
-/* ---------- v9: Recent on the Tape tab, page never moves ---------- */
+/* ---------- v10: Recent UNDER the keypad; bigger taps; keys never jump ---------- */
 /* Recent shows on every tab; empty list gets a short note. Clear keeps its space but is invisible when empty. */
 .recent .rEmpty { font-size: 16px; color: var(--dim); }
 #recentClear.off { visibility: hidden; }
 html.fixedPage, html.fixedPage body { overflow: hidden; }
-/* Tape: Recent gets its own strip between the answer lines and the keypad.
-   Its height is fixed (never depends on how many answers are saved), and it scrolls inside itself,
-   so typing, = and Clear list can't push the keypad. Keys take the rest of the screen. */
-body.fixed { --recH: 64px; }
-body.fixed .keys { flex: 1 1 0; }
-body.fixed .fScroll { flex: 0.0001 0 var(--recH); height: auto; min-height: var(--recH); overflow-y: auto; overflow-x: hidden; margin: 0 0 6px; border-top: 1px solid var(--line); }
-body.fixed .fScroll #recentBox { padding: 0; }
-body.fixed .fScroll .recentHead { position: sticky; top: 0; z-index: 1; background: var(--panel); margin: 0; padding: 1px 0; min-height: 31px; flex-wrap: nowrap; }
-body.fixed .fScroll .recentHead h2 { font-size: 16px; color: var(--dim); font-weight: 800; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-body.fixed .fScroll .recentHead .btn.small { min-height: 29px; font-size: 14px; padding: 0 12px; flex: none; }
-body.fixed .fScroll .recent li { display: flex; align-items: baseline; gap: 10px; height: 32px; padding: 0; border-top: 1px solid var(--line); white-space: nowrap; overflow: hidden; }
-body.fixed .fScroll .recent .r-from { order: 1; flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; font-size: 15px; line-height: 31px; }
-body.fixed .fScroll .recent .r-to { order: 2; flex: none; max-width: 75%; overflow: hidden; text-overflow: ellipsis; font-size: 20px; line-height: 31px; }
-body.fixed .fScroll .recent .rEmpty { display: block; font-size: 15px; line-height: 31px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-body.fixed .fScroll .how { margin: 8px 0 4px; }
-/* very short screens: just the newest answer on one line (swipe the strip for older ones) so the keys stay big enough */
+/* Tape: keypad stays locked above; Recent is a fixed-height strip BELOW the keys (same spot as other tabs).
+   Height never depends on how many answers are saved, so typing / = / Clear list can't move the keypad. */
+body.fixed { --recH: 140px; }
+body.fixed .keys { flex: 1 1 0; min-height: 0; }
+/* help text only: crumbs of leftover space above the keys (not a Recent strip anymore) */
+body.fixed .fScroll { flex: 0.0001 1 0; height: auto; min-height: 0; margin: 0; border-top: 0; overflow-y: auto; overflow-x: hidden; }
+body.fixed .fScroll .how { margin: 4px 0; }
+body.fixed #tab-frac > #recentBox {
+  flex: 0 0 var(--recH);
+  height: var(--recH);
+  min-height: var(--recH);
+  max-height: var(--recH);
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  margin: 6px 0 0;
+  padding: 4px 0 0;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  background: none;
+}
+body.fixed #tab-frac > #recentBox .recentHead {
+  position: sticky; top: 0; z-index: 1; background: var(--bg);
+  margin: 0; padding: 2px 0 4px; min-height: 40px; flex-wrap: nowrap; align-items: center;
+}
+body.fixed #tab-frac > #recentBox .recentHead h2 {
+  font-size: 18px; color: var(--dim); font-weight: 800;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+body.fixed #tab-frac > #recentBox .recentHead .btn.small {
+  min-height: 40px; font-size: 16px; padding: 0 16px; flex: none;
+}
+body.fixed #tab-frac > #recentBox .recent li {
+  display: flex; align-items: center; gap: 10px;
+  min-height: 48px; height: 48px; padding: 0;
+  border-top: 1px solid var(--line); white-space: nowrap; overflow: hidden;
+}
+body.fixed #tab-frac > #recentBox .recent .r-from {
+  order: 1; flex: 1 1 auto; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis;
+  font-size: 16px; line-height: 48px;
+}
+body.fixed #tab-frac > #recentBox .recent .r-to {
+  order: 2; flex: none; max-width: 75%;
+  overflow: hidden; text-overflow: ellipsis;
+  font-size: 22px; line-height: 48px;
+}
+body.fixed #tab-frac > #recentBox .recent .rEmpty {
+  display: block; font-size: 16px; line-height: 48px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+/* short screens: still keep a usable Recent under the keys (header + one tall row) */
 @media (max-height: 680px) {
-  body.fixed { --recH: 33px; }
-  body.fixed .fScroll .recentHead { display: none; }
-  body.fixed .fScroll .recent li:first-child { border-top: 0; }
+  body.fixed { --recH: 96px; }
+  body.fixed #tab-frac > #recentBox .recentHead { min-height: 36px; padding: 0 0 2px; }
+  body.fixed #tab-frac > #recentBox .recentHead .btn.small { min-height: 36px; font-size: 15px; padding: 0 12px; }
+  body.fixed #tab-frac > #recentBox .recent li { min-height: 44px; height: 44px; }
+  body.fixed #tab-frac > #recentBox .recent .r-from,
+  body.fixed #tab-frac > #recentBox .recent .r-to,
+  body.fixed #tab-frac > #recentBox .recent .rEmpty { line-height: 44px; }
 }
 /* ft key: one line in both languages ("pies '" used to wrap and get cut off on short keys) */
 .keys .k[data-k="ft"] { white-space: nowrap; }
